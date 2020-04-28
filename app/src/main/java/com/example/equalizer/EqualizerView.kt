@@ -38,9 +38,13 @@ class EqualizerView @JvmOverloads constructor(
     var col2CircleRect = RectF()
     var col3CircleRect = RectF()
 
-    var y1 : Int = 0
-    var y2 : Int = 0
-    var y3 : Int = 0
+    var col1BottomRect = RectF()
+    var col2BottomRect = RectF()
+    var col3BottomRect = RectF()
+
+    var y1 : Int = -1
+    var y2 : Int = -1
+    var y3 : Int = -1
 
     var speed1: Float = speeds[1]
     var speed2: Float = speeds[0]
@@ -89,20 +93,30 @@ class EqualizerView @JvmOverloads constructor(
         canvas?.drawOval(col2CircleRect, colPaint)
         canvas?.drawOval(col3CircleRect, colPaint)
 
+        canvas?.drawOval(col1BottomRect, colPaint)
+        canvas?.drawOval(col2BottomRect, colPaint)
+        canvas?.drawOval(col3BottomRect, colPaint)
+
     }
 
     private fun computeRects(){
-
         totalGap = ((gapPercent * width).toInt())
         gap = ((gapPercent * width) / 2f).toInt()
         colWidth = ((width - totalGap) / 3f).toInt()
+
+        if(y1 == -1){
+            y1 = height/5
+            y2 = height/5
+            y3 = height/5
+        }
+
 
         colPaint.color = ContextCompat.getColor(context, R.color.white)
         //col1
         col1Rect.apply {
             left = 0
             right = left + colWidth
-            bottom = height
+            bottom = height - (colWidth/2f).toInt()
             top = height - y1
         }
 
@@ -113,11 +127,18 @@ class EqualizerView @JvmOverloads constructor(
             top = col1Rect.top - colWidth / 2f
         }
 
+        col1BottomRect.apply {
+            left = col1Rect.left.toFloat()
+            right = col1Rect.right.toFloat()
+            bottom = height.toFloat()
+            top = (height - colWidth).toFloat()
+        }
+
         //col2
         col2Rect.apply {
             left = col1Rect.right + gap
             right = left + colWidth
-            bottom = height
+            bottom = height - (colWidth/2f).toInt()
             top = height - y2
         }
 
@@ -128,11 +149,18 @@ class EqualizerView @JvmOverloads constructor(
             top = col2Rect.top - colWidth / 2f
         }
 
+        col2BottomRect.apply {
+            left = col2Rect.left.toFloat()
+            right = col2Rect.right.toFloat()
+            bottom = height.toFloat()
+            top = (height - colWidth).toFloat()
+        }
+
         //col3
         col3Rect.apply {
             left = col2Rect.right + gap
             right = left + colWidth
-            bottom = height
+            bottom = height - (colWidth/2f).toInt()
             top = height - y3
         }
 
@@ -141,6 +169,13 @@ class EqualizerView @JvmOverloads constructor(
             right = col3Rect.right.toFloat()
             bottom = col3Rect.top + colWidth / 2f
             top = col3Rect.top - colWidth / 2f
+        }
+
+        col3BottomRect.apply {
+            left = col3Rect.left.toFloat()
+            right = col3Rect.right.toFloat()
+            bottom = height.toFloat()
+            top = (height - colWidth).toFloat()
         }
 
     }
@@ -178,9 +213,9 @@ class EqualizerView @JvmOverloads constructor(
     }
 
     private fun reset(){
-        y1 = 0
-        y2 = 0
-        y3 = 0
+        y1 = -1
+        y2 = -1
+        y3 = -1
     }
 
     private fun generateNewPositions(){
@@ -190,24 +225,24 @@ class EqualizerView @JvmOverloads constructor(
         if(y1 >= height - colWidth){
             y1 = height - colWidth
             speed1 = speeds[random.nextInt(3)]
-        }else if(y1 <= 0){
-            y1 = 0
+        }else if(y1 <= colWidth/2f){
+            y1 = (colWidth/2f).toInt()
             speed1 = -speeds[random.nextInt(3)]
         }
 
         if(y2 >= height - colWidth){
             y2 = height - colWidth
             speed2 = speeds[random.nextInt(3)]
-        }else if(y2 <= 0){
-            y2 = 0
+        }else if(y2 <= colWidth/2f){
+            y2 = (colWidth/2f).toInt()
             speed2 = -speeds[random.nextInt(3)]
         }
 
         if(y3 >= height - colWidth){
             y3 = height - colWidth
             speed3 = speeds[random.nextInt(3)]
-        }else if(y3 <= 0){
-            y3 = 0
+        }else if(y3 <= colWidth/2f){
+            y3 = (colWidth/2f).toInt()
             speed3 = -speeds[random.nextInt(3)]
         }
 
