@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Handler
 import android.util.AttributeSet
+import android.util.Log.i
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -191,6 +192,7 @@ class EqualizerView @JvmOverloads constructor(
     }
 
     fun start(){
+        animationHandler.removeCallbacks(animationRunnable)
         isStarted = true
         animationHandler.postDelayed(animationRunnable, 33) //roughly 30fps
     }
